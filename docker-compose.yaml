@@ -1,0 +1,113 @@
+version: "3.8"
+
+services:
+  application:
+    container_name: builders-api
+    build:
+      context: ./
+      dockerfile: .setup/Dockerfile
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8100:80"
+    networks:
+      - builders
+
+  builders-redis:
+    image: redis:latest
+    container_name: builders-redis
+    ports:
+        - "6379:6379"
+    networks:
+      - builders
+
+#  redis-commander:
+#    container_name: redis-commander
+#    image: rediscommander/redis-commander
+#    environment:
+#      - REDIS_HOSTS=redis:redis:6379
+#    depends_on:
+#      - redis
+#    ports:
+#        - "8102:8081"
+#    networks:
+#      - builders
+
+  mysql:
+    image: mysql:5.7.29
+    container_name: builders-db
+    restart: unless-stopped
+    tty: true
+    environment:
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_USER: ${DB_USERNAME}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        SERVICE_TAGS: dev
+        SERVICE_NAME: mysql
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+    ports:
+      - ${DB_PORT}:3306
+    expose:
+      - 3306
+    networks:
+      - builders
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - builders
+
+#  mongo:
+#    image: mongo:5.0.3
+#    container_name: mongo
+#    volumes:
+#      - ./.docker/mongo:/data/db
+#    networks:
+#      - builders
+
+#  mongo-express:
+#    image: mongo-express
+#    container_name: mongo-express
+#    restart: always
+#    ports:
+#      - "8101:8081"
+#    networks:
+#      - builders
+
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:6.2.4
+#    container_name: credit-guarantor-backend-zookeeper
+#    environment:
+#        ZOOKEEPER_CLIENT_PORT: 2181
+#        ZOOKEEPER_TICK_TIME: 2000
+#    networks:
+#        - builders
+
+#   kafka:
+#     image: confluentinc/cp-kafka:latest
+#     container_name: credit-guarantor-backend-kafka
+#     depends_on:
+#         - zookeeper
+#     environment:
+#         KAFKA_BROKER_ID: 1
+#         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#         KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#         KAFKA_CREATE_TOPICS: ""
+#     volumes:
+#         - .docker-volumes/kafka:/data/db
+#     networks:
+#         - builders
+
+networks:
+  builders:
+    driver: bridge
