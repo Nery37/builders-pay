@@ -48,7 +48,7 @@
 			]
 		},
 		{
-			"name": "Heath",
+			"name": "Health",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -58,7 +58,7 @@
 						"{{URL_LOCAL}}"
 					],
 					"path": [
-						"heath"
+						"health"
 					]
 				}
 			},
