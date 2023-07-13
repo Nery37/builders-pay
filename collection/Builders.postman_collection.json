@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3358d3d4-9a75-4e48-bf9a-05bbb6bd113e",
+		"_postman_id": "32d0545d-90e1-48d2-afbf-7504fd36b6b6",
 		"name": "Builders",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11163004"
@@ -34,11 +34,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL_LOCAL}}/billet",
+							"raw": "localhost:8100/api/billet",
 							"host": [
-								"{{URL_LOCAL}}"
+								"localhost"
 							],
+							"port": "8100",
 							"path": [
+								"api",
 								"billet"
 							]
 						}
