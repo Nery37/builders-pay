@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL_LOCAL}}/heath",
+					"raw": "{{URL_LOCAL}}/health",
 					"host": [
 						"{{URL_LOCAL}}"
 					],
